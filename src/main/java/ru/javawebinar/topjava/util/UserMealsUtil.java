@@ -31,17 +31,15 @@ public class UserMealsUtil {
 
     public static List<UserMealWithExceed> getFilteredWithExceeded(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         Map<LocalDate, Integer> dailyCalories = new HashMap<>();
-        List<UserMealWithExceed> result = new ArrayList<>();
         for (UserMeal meal : mealList) {
             dailyCalories.merge(meal.getDateTime().toLocalDate(), meal.getCalories(), Integer::sum);
         }
+
+        List<UserMealWithExceed> result = new ArrayList<>();
         for (UserMeal meal : mealList) {
             LocalDateTime dateTime = meal.getDateTime();
             if (TimeUtil.isBetween(dateTime.toLocalTime(), startTime, endTime)) {
-                result.add(new UserMealWithExceed(dateTime,
-                        meal.getDescription(),
-                        meal.getCalories(),
-                        dailyCalories.get(dateTime.toLocalDate()) > caloriesPerDay));
+                result.add(mealToMealWithExceed(meal, dailyCalories.get(dateTime.toLocalDate()) > caloriesPerDay));
             }
         }
         return result;
@@ -52,11 +50,14 @@ public class UserMealsUtil {
                 .collect(Collectors.groupingBy(a -> a.getDateTime().toLocalDate()))
                 .values()
                 .stream()
-                .flatMap(userMeals -> userMeals.stream()
-                        .map(meal -> mealToMealWithExceed(meal, userMeals.stream()
-                                .mapToInt(UserMeal::getCalories)
-                                .sum() > caloriesPerDay)))
-                .filter(meal -> TimeUtil.isBetween(meal.getTime(), startTime, endTime))
+                .flatMap(userMeals -> {
+                    boolean exceed = userMeals.stream()
+                            .mapToInt(UserMeal::getCalories)
+                            .sum() > caloriesPerDay;
+                    return userMeals.stream()
+                            .map(meal -> mealToMealWithExceed(meal, exceed))
+                            .filter(meal -> TimeUtil.isBetween(meal.getTime(), startTime, endTime));
+                })
                 .collect(Collectors.toList());
     }
 
