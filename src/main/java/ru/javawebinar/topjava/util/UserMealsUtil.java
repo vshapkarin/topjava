@@ -55,8 +55,8 @@ public class UserMealsUtil {
                             .mapToInt(UserMeal::getCalories)
                             .sum() > caloriesPerDay;
                     return userMeals.stream()
-                            .map(meal -> mealToMealWithExceed(meal, exceed))
-                            .filter(meal -> TimeUtil.isBetween(meal.getTime(), startTime, endTime));
+                            .filter(meal -> TimeUtil.isBetween(meal.getDateTime().toLocalTime(), startTime, endTime))
+                            .map(meal -> mealToMealWithExceed(meal, exceed));
                 })
                 .collect(Collectors.toList());
     }
