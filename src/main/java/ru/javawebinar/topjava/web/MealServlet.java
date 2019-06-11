@@ -1,7 +1,7 @@
 package ru.javawebinar.topjava.web;
 
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.storage.ConcurrentHashMapStorage;
+import ru.javawebinar.topjava.storage.MapMealStorage;
 import ru.javawebinar.topjava.storage.Storage;
 import ru.javawebinar.topjava.util.MealsUtil;
 
@@ -13,9 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.Month;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class MealServlet extends HttpServlet {
     private Storage storage;
@@ -23,14 +20,7 @@ public class MealServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        storage = new ConcurrentHashMapStorage(Stream.of(
-                new Meal(LocalDateTime.of(2019, Month.MAY, 30, 10, 0), "Завтрак", 500),
-                new Meal(LocalDateTime.of(2019, Month.MAY, 30, 13, 0), "Обед", 1000),
-                new Meal(LocalDateTime.of(2019, Month.MAY, 30, 20, 0), "Ужин", 600),
-                new Meal(LocalDateTime.of(2019, Month.MAY, 31, 10, 0), "Завтрак", 1000),
-                new Meal(LocalDateTime.of(2019, Month.MAY, 31, 13, 0), "Обед", 500),
-                new Meal(LocalDateTime.of(2019, Month.MAY, 31, 20, 0), "Ужин", 490)
-        ).collect(Collectors.toMap(Meal::getId, meal -> meal)));
+        storage = new MapMealStorage(MealsUtil.testMeals);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -46,15 +36,11 @@ public class MealServlet extends HttpServlet {
         int calories = requestCalories.equals("") ? 0 : Integer.valueOf(requestCalories);
 
         String description = request.getParameter("description");
-        Meal newMeal;
+        Meal newMeal = new Meal(dateTime, description, calories);
         if (id == -1) {
-            newMeal = new Meal(dateTime, description, calories);
             storage.save(newMeal);
         } else {
-            newMeal = storage.get(id);
-            newMeal.setDateTime(dateTime);
-            newMeal.setDescription(description);
-            newMeal.setCalories(calories);
+            newMeal.setId(id);
             storage.update(newMeal);
         }
         response.sendRedirect("meals");
@@ -64,7 +50,7 @@ public class MealServlet extends HttpServlet {
         String action = request.getParameter("action");
         String id = request.getParameter("id");
         if (action == null) {
-            request.setAttribute("meals", MealsUtil.getFilteredWithExcessInOnePass2(storage.getList(), LocalTime.MIN, LocalTime.MAX, 2000));
+            request.setAttribute("meals", MealsUtil.getFilteredWithExcess(storage.getList(), LocalTime.MIN, LocalTime.MAX, 2000));
             request.getRequestDispatcher("/WEB-INF/jsp/meals.jsp").forward(request, response);
             return;
         }
@@ -73,15 +59,15 @@ public class MealServlet extends HttpServlet {
             case "delete":
                 storage.delete(Integer.valueOf(id));
                 response.sendRedirect("meals");
-                return;
+                break;
             case "create":
                 response.sendRedirect("meals?action=edit&id=-1");
-                return;
+                break;
             case "edit":
                 meal = storage.get(Integer.valueOf(id));
                 request.setAttribute("meal", meal);
                 request.getRequestDispatcher("/WEB-INF/jsp/edit.jsp").forward(request, response);
-                return;
+                break;
             default:
                 throw new IllegalArgumentException("Action " + action + " is illegal");
         }

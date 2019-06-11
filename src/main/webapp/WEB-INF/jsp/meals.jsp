@@ -15,7 +15,7 @@
         </tr>
     <c:set var="formatter" value="${DateTimeFormatter.ofPattern(\"yyyy-MM-dd HH:mm:ss\")}"/>
     <c:forEach items="${meals}" var="meal">
-                <tr style="background: ${meal.excess ? 'lightpink' : 'white'}">
+                <tr style="color: ${meal.excess ? 'red' : 'limegreen'}">
                     <td>${meal.id}</td>
                     <td>${formatter.format(meal.dateTime)}</td>
                     <td>${meal.description}</td>
