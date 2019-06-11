@@ -50,9 +50,7 @@ public class MealServlet extends HttpServlet {
         String action = request.getParameter("action");
         String id = request.getParameter("id");
         if (action == null) {
-            request.setAttribute("meals", MealsUtil.getFilteredWithExcess(storage.getList(), LocalTime.MIN, LocalTime.MAX, 2000));
-            request.getRequestDispatcher("/WEB-INF/jsp/meals.jsp").forward(request, response);
-            return;
+            action = "";
         }
         Meal meal;
         switch (action) {
@@ -69,7 +67,9 @@ public class MealServlet extends HttpServlet {
                 request.getRequestDispatcher("/WEB-INF/jsp/edit.jsp").forward(request, response);
                 break;
             default:
-                throw new IllegalArgumentException("Action " + action + " is illegal");
+                request.setAttribute("meals", MealsUtil.getFilteredWithExcess(storage.getList(), LocalTime.MIN, LocalTime.MAX, 2000));
+                request.getRequestDispatcher("/WEB-INF/jsp/meals.jsp").forward(request, response);
+                break;
         }
     }
 }
