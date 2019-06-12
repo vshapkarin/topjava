@@ -57,19 +57,20 @@ public class MealServlet extends HttpServlet {
             case "delete":
                 storage.delete(Integer.valueOf(id));
                 response.sendRedirect("meals");
-                break;
+                return;
             case "create":
-                response.sendRedirect("meals?action=edit&id=-1");
+                meal = new Meal(null, null, 0);
+                meal.setId(-1);
                 break;
             case "edit":
                 meal = storage.get(Integer.valueOf(id));
-                request.setAttribute("meal", meal);
-                request.getRequestDispatcher("/WEB-INF/jsp/edit.jsp").forward(request, response);
                 break;
             default:
                 request.setAttribute("meals", MealsUtil.getFilteredWithExcess(storage.getList(), LocalTime.MIN, LocalTime.MAX, 2000));
                 request.getRequestDispatcher("/WEB-INF/jsp/meals.jsp").forward(request, response);
-                break;
+                return;
         }
+        request.setAttribute("meal", meal);
+        request.getRequestDispatcher("/WEB-INF/jsp/edit.jsp").forward(request, response);
     }
 }
