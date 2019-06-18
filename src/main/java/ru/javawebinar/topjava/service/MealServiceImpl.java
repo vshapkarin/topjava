@@ -23,7 +23,6 @@ public class MealServiceImpl implements MealService {
 
     @Override
     public Meal create(int userId, Meal meal) {
-        meal.setUserId(userId);
         return repository.save(userId, meal);
     }
 

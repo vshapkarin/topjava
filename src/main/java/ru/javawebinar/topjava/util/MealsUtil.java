@@ -26,6 +26,15 @@ public class MealsUtil {
             new Meal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510)
     );
 
+    public static final List<Meal> MEALS_2 = Arrays.asList(
+            new Meal(LocalDateTime.of(2019, Month.APRIL, 15, 6, 0), "Завтрак", 600),
+            new Meal(LocalDateTime.of(2019, Month.APRIL, 15, 13, 0), "Обед", 1000),
+            new Meal(LocalDateTime.of(2019, Month.APRIL, 15, 20, 0), "Ужин", 500),
+            new Meal(LocalDateTime.of(2019, Month.APRIL, 13, 10, 0), "Завтрак", 1000),
+            new Meal(LocalDateTime.of(2019, Month.APRIL, 13, 13, 0), "Обед", 500),
+            new Meal(LocalDateTime.of(2019, Month.APRIL, 30, 20, 0), "Ужин", 7510)
+    );
+
     public static final int DEFAULT_CALORIES_PER_DAY = 2000;
 
     public static List<MealTo> getWithExcess(Collection<Meal> meals, int caloriesPerDay) {
@@ -51,9 +60,5 @@ public class MealsUtil {
 
     private static MealTo createWithExcess(Meal meal, boolean excess) {
         return new MealTo(meal.getId(), meal.getDateTime(), meal.getDescription(), meal.getCalories(), excess);
-    }
-
-    public static boolean isExistAndValid(int userId, Meal oldMeal) {
-        return (oldMeal != null) && (oldMeal.getUserId() == userId);
     }
 }
