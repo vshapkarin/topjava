@@ -12,8 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-import static ru.javawebinar.topjava.util.MealsUtil.DEFAULT_CALORIES_PER_DAY;
-import static ru.javawebinar.topjava.util.MealsUtil.getWithExcess;
+import static ru.javawebinar.topjava.util.MealsUtil.*;
 import static ru.javawebinar.topjava.util.ValidationUtil.assureIdConsistent;
 import static ru.javawebinar.topjava.web.SecurityUtil.authUserId;
 
@@ -53,10 +52,10 @@ public class MealRestController {
     public List<MealTo> getAllFiltered(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
         log.info("getAllFiltered userId={} startDate={} endDate={} startTime={} endTime={}",
                 authUserId(), startDate, endDate, startTime, endTime);
-        return getWithExcess(service.getAllFiltered(authUserId(),
+        return getFilteredWithExcess(service.getAllFiltered(authUserId(),
                 startDate == null ? LocalDate.MIN : startDate,
-                endDate == null ? LocalDate.MAX : endDate,
+                endDate == null ? LocalDate.MAX : endDate), DEFAULT_CALORIES_PER_DAY,
                 startTime == null ? LocalTime.MIN : startTime,
-                endTime == null ? LocalTime.MAX : endTime), DEFAULT_CALORIES_PER_DAY);
+                endTime == null ? LocalTime.MAX : endTime);
     }
 }

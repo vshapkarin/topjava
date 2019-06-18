@@ -7,7 +7,6 @@ import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Collection;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFound;
@@ -49,7 +48,7 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    public Collection<Meal> getAllFiltered(int userId, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
-        return repository.getAllFiltered(userId, startDate, endDate, startTime, endTime);
+    public Collection<Meal> getAllFiltered(int userId, LocalDate startDate, LocalDate endDate) {
+        return repository.getAllFiltered(userId, startDate, endDate);
     }
 }

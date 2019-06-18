@@ -9,8 +9,9 @@ import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.*;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -72,10 +73,9 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public Collection<Meal> getAllFiltered(int userId, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
+    public Collection<Meal> getAllFiltered(int userId, LocalDate startDate, LocalDate endDate) {
         return getAll(userId).stream()
-                .filter(meal -> DateTimeUtil.isBetween(meal.getDate(), startDate, endDate)
-                        && DateTimeUtil.isBetween(meal.getTime(), startTime, endTime))
+                .filter(meal -> DateTimeUtil.isBetween(meal.getDate(), startDate, endDate))
                 .collect(Collectors.toList());
     }
 }
