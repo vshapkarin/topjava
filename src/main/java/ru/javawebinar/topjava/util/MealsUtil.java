@@ -18,21 +18,21 @@ import static java.util.stream.Collectors.toList;
 
 public class MealsUtil {
     public static final List<Meal> MEALS = Arrays.asList(
-            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 1000),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510)
+            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак(userId=1)", 500),
+            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед(userId=1)", 1000),
+            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин(userId=1)", 500),
+            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак(userId=1)", 1000),
+            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед(userId=1)", 500),
+            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин(userId=1)", 510)
     );
 
     public static final List<Meal> MEALS_2 = Arrays.asList(
-            new Meal(LocalDateTime.of(2019, Month.APRIL, 15, 6, 0), "Завтрак", 600),
-            new Meal(LocalDateTime.of(2019, Month.APRIL, 15, 13, 0), "Обед", 1000),
-            new Meal(LocalDateTime.of(2019, Month.APRIL, 15, 20, 0), "Ужин", 500),
-            new Meal(LocalDateTime.of(2019, Month.APRIL, 13, 10, 0), "Завтрак", 1000),
-            new Meal(LocalDateTime.of(2019, Month.APRIL, 13, 13, 0), "Обед", 500),
-            new Meal(LocalDateTime.of(2019, Month.APRIL, 30, 20, 0), "Ужин", 7510)
+            new Meal(LocalDateTime.of(2019, Month.APRIL, 15, 6, 0), "Завтрак(userId=2)", 600),
+            new Meal(LocalDateTime.of(2019, Month.APRIL, 15, 13, 0), "Обед(userId=2)", 1000),
+            new Meal(LocalDateTime.of(2019, Month.APRIL, 15, 20, 0), "Ужин(userId=2)", 500),
+            new Meal(LocalDateTime.of(2019, Month.APRIL, 13, 10, 0), "Завтрак(userId=2)", 1000),
+            new Meal(LocalDateTime.of(2019, Month.APRIL, 13, 13, 0), "Обед(userId=2)", 500),
+            new Meal(LocalDateTime.of(2019, Month.APRIL, 30, 20, 0), "Ужин(userId=2)", 7510)
     );
 
     public static final int DEFAULT_CALORIES_PER_DAY = 2000;

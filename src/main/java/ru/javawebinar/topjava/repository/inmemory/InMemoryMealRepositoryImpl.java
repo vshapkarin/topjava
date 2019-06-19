@@ -19,23 +19,19 @@ import java.util.stream.Collectors;
 public class InMemoryMealRepositoryImpl implements MealRepository {
     private static final Logger log = LoggerFactory.getLogger(InMemoryMealRepositoryImpl.class);
     private Map<Integer, Map<Integer, Meal>> repository = new ConcurrentHashMap<>();
-    private Map<Integer, Meal> accMap;
     private AtomicInteger counter = new AtomicInteger(0);
 
     {
         MealsUtil.MEALS.forEach(meal -> {
-            meal.setUserId(1);
             save(1, meal);
         });
         MealsUtil.MEALS_2.forEach(meal -> {
-            meal.setUserId(2);
             save(2, meal);
         });
     }
 
     @Override
     public Meal save(int userId, Meal meal) {
-        meal.setUserId(userId);
         if (meal.isNew()) {
             log.info("save new meal");
             meal.setId(counter.incrementAndGet());
@@ -44,8 +40,8 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
         }
         int mealId = meal.getId();
         log.info("update meal Id={}", mealId);
-        Meal oldMeal = isExistAndValid(userId, (accMap = repository.get(userId)) != null ? accMap.get(mealId) : null);
-        if (oldMeal != null) {
+        Map<Integer, Meal> accMap = repository.get(userId);
+        if (accMap != null && accMap.containsKey(mealId)) {
             accMap.replace(mealId, meal);
             return meal;
         }
@@ -55,14 +51,15 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     @Override
     public boolean delete(int userId, int mealId) {
         log.info("delete meal Id={}", mealId);
-        Meal oldMeal = isExistAndValid(userId, (accMap = repository.get(userId)) != null ? accMap.get(mealId) : null);
-        return (oldMeal != null ? accMap.remove(mealId) : null) != null;
+        Map<Integer, Meal> accMap = repository.get(userId);
+        return (accMap != null ? accMap.remove(mealId) : null) != null;
     }
 
     @Override
     public Meal get(int userId, int mealId) {
         log.info("get meal Id={}", mealId);
-        return isExistAndValid(userId, (accMap = repository.get(userId)) != null ? accMap.get(mealId) : null);
+        Map<Integer, Meal> accMap = repository.get(userId);
+        return accMap != null ? accMap.get(mealId) : null;
     }
 
     @Override
@@ -78,16 +75,13 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     @Override
     public Collection<Meal> getAllFiltered(int userId, Predicate<Meal> filter) {
-        return (accMap = repository.get(userId)) == null
+        Map<Integer, Meal> accMap = repository.get(userId);
+        return accMap == null
                 ? Collections.emptyList()
                 : accMap.values().stream()
                 .filter(filter)
                 .sorted(Comparator.comparing(Meal::getDateTime).reversed())
                 .collect(Collectors.toList());
-    }
-
-    private static Meal isExistAndValid(int userId, Meal oldMeal) {
-        return (oldMeal != null) && (oldMeal.getUserId() == userId) ? oldMeal : null;
     }
 }
 
