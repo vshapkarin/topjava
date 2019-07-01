@@ -12,14 +12,17 @@ public class TestTimeLogUtil {
 
     private static Logger log = LoggerFactory.getLogger("TimeLogger");
 
-    public static List<String> testTimeTotals = new ArrayList<>();
+    public static List<String> timeTotals = new ArrayList<>();
 
     public static void logInfo(Description description, String status, long nanos) {
-        String testName = description.getMethodName();
-        String message = String.format("Test %s %s, spent %d microseconds",
-                testName, status, TimeUnit.NANOSECONDS.toMicros(nanos));
-        testTimeTotals.add(message + "\n");
+        String message = String.format("Test %s %s, spent %d milliseconds",
+                description.getMethodName(), status, TimeUnit.NANOSECONDS.toMillis(nanos));
+        timeTotals.add("\n" + message);
         log.info(message);
+    }
+
+    public static void logTimeTotals() {
+        log.info(timeTotals.toString());
     }
 
 

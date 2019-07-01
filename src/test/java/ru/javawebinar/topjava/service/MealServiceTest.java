@@ -1,11 +1,9 @@
 package ru.javawebinar.topjava.service;
 
 import org.junit.AfterClass;
-import org.junit.AssumptionViolatedException;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.junit.rules.RuleChain;
 import org.junit.rules.Stopwatch;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
@@ -24,7 +22,7 @@ import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
 import static ru.javawebinar.topjava.util.TestTimeLogUtil.logInfo;
-import static ru.javawebinar.topjava.util.TestTimeLogUtil.testTimeTotals;
+import static ru.javawebinar.topjava.util.TestTimeLogUtil.logTimeTotals;
 
 @ContextConfiguration({
         "classpath:spring/spring-app.xml",
@@ -37,28 +35,17 @@ public class MealServiceTest {
     @Autowired
     private MealService service;
 
-    private ExpectedException thrown;
+    @Rule
+    public Stopwatch stopwatch = new Stopwatch() {
+
+        @Override
+        protected void finished(long nanos, Description description) {
+            logInfo(description, "finished", nanos);
+        }
+    };
 
     @Rule
-    public RuleChain chain = RuleChain
-            .outerRule(
-                    new Stopwatch() {
-                        @Override
-                        protected void succeeded(long nanos, Description description) {
-                            logInfo(description, "succeeded", nanos);
-                        }
-
-                        @Override
-                        protected void failed(long nanos, Throwable e, Description description) {
-                            logInfo(description, "failed", nanos);
-                        }
-
-                        @Override
-                        protected void skipped(long nanos, AssumptionViolatedException e, Description description) {
-                            logInfo(description, "skipped", nanos);
-                        }
-                    })
-            .around(thrown = ExpectedException.none());
+    public ExpectedException thrown = ExpectedException.none();
 
     @Test
     public void delete() throws Exception {
@@ -132,6 +119,6 @@ public class MealServiceTest {
 
     @AfterClass
     public static void printTestsTime() {
-        System.out.println(testTimeTotals);
+        logTimeTotals();
     }
 }
