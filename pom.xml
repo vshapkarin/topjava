@@ -80,6 +80,13 @@
             <scope>runtime</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.fusesource.jansi</groupId>
+            <artifactId>jansi</artifactId>
+            <version>1.18</version>
+            <scope>runtime</scope>
+        </dependency>
+
         <!-- Spring -->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -157,6 +164,13 @@
             <artifactId>assertj-core</artifactId>
             <version>3.12.2</version>
             <scope>test</scope>
+        </dependency>
+
+       <!--Guava-->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>21.0</version>
         </dependency>
     </dependencies>
 
