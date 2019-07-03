@@ -165,13 +165,6 @@
             <version>3.12.2</version>
             <scope>test</scope>
         </dependency>
-
-       <!--Guava-->
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>21.0</version>
-        </dependency>
     </dependencies>
 
     <profiles>
