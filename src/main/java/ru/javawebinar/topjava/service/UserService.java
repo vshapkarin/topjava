@@ -44,6 +44,10 @@ public class UserService {
         return checkNotFound(repository.getByEmail(email), "email=" + email);
     }
 
+    public User getWithMeals(int id) throws NotFoundException {
+        return checkNotFoundWithId(repository.getWithMeals(id), id);
+    }
+
     @Cacheable("users")
     public List<User> getAll() {
         return repository.getAll();
