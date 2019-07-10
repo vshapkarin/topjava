@@ -24,10 +24,6 @@ public class MealTestData {
 
     public static final List<Meal> MEALS = List.of(MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1);
 
-    static {
-        ADMIN_MEAL2.setUser(UserTestData.ADMIN);
-    }
-
     public static Meal getCreated() {
         return new Meal(null, of(2015, Month.JUNE, 1, 18, 0), "Созданный ужин", 300);
     }

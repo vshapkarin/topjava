@@ -22,6 +22,6 @@ public interface MealRepository {
     List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId);
 
     default Meal getWithUser(int id, int userId) {
-        return null;
+        throw new UnsupportedOperationException("Default method getWithMeals is not implemented in given class");
     }
 }

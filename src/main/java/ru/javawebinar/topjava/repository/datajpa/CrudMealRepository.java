@@ -14,17 +14,6 @@ public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
 
     @Transactional
     @Modifying
-    @Query("UPDATE Meal m SET m.dateTime = :datetime, m.calories= :calories, m.description=:desc" +
-            " WHERE m.id=:id AND m.user.id=:userId")
-    int update(@Param("datetime") LocalDateTime dateTime,
-               @Param("calories") int calories,
-               @Param("desc") String description,
-               @Param("id") int id,
-               @Param("userId") int userId
-    );
-
-    @Transactional
-    @Modifying
     @Query("DELETE FROM Meal m WHERE m.id=:id AND m.user.id=:userId")
     int delete(@Param("id") int id, @Param("userId") int userId);
 
