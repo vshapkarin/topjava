@@ -8,11 +8,8 @@
 <head>
     <jsp:include page="fragments/headTag.jsp"/>
     <title><spring:message code="meal.title"/></title>
-    <%--    https://stackoverflow.com/questions/4764405/how-to-use-relative-paths-without-including-the-context-root-name--%>
-    <c:set var="url">${pageContext.request.requestURL}</c:set>
-    <base href="${fn2:substring(url, 0, fn2:length(url) - fn2:length(pageContext.request.requestURI))}${pageContext.request.contextPath}/"/>
+    <base href="${pageContext.request.contextPath}/"/>
     <link rel="stylesheet" href="resources/css/style.css">
-    <script>var base = document.getElementsByTagName("base")[0].href;</script>
 </head>
 <body>
 <jsp:include page="fragments/bodyHeader.jsp"/>
