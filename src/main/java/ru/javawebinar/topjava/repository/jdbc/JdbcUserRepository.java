@@ -86,7 +86,7 @@ public class JdbcUserRepository implements UserRepository {
             Map<Integer, Set<Role>> map = new HashMap<>();
             while (resultSet.next()) {
                 map.computeIfAbsent(resultSet.getInt("user_id"),
-                        key -> new HashSet<>()).add(Role.valueOf(resultSet.getString("role")));
+                        key -> EnumSet.noneOf(Role.class)).add(Role.valueOf(resultSet.getString("role")));
             }
             return map;
         });
