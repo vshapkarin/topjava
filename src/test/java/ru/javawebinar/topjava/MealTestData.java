@@ -1,17 +1,27 @@
 package ru.javawebinar.topjava;
 
+import org.springframework.test.web.servlet.ResultMatcher;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.to.MealTo;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.Month;
+import java.util.Collection;
 import java.util.List;
 
 import static java.time.LocalDateTime.of;
 import static org.assertj.core.api.Assertions.assertThat;
+import static ru.javawebinar.topjava.TestUtil.readListFromJsonMvcResult;
 import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
 
 public class MealTestData {
     public static final int MEAL1_ID = START_SEQ + 2;
     public static final int ADMIN_MEAL_ID = START_SEQ + 8;
+    public static final LocalDate START_DATE = LocalDate.of(2015, Month.MAY, 31);
+    public static final LocalDate END_DATE = LocalDate.of(2015, Month.MAY, 31);
+    public static final LocalTime START_TIME = LocalTime.of(12,0);
+    public static final LocalTime END_TIME = LocalTime.of(23,59);
 
     public static final Meal MEAL1 = new Meal(MEAL1_ID, of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500);
     public static final Meal MEAL2 = new Meal(MEAL1_ID + 1, of(2015, Month.MAY, 30, 13, 0), "Обед", 1000);
@@ -42,5 +52,10 @@ public class MealTestData {
 
     public static void assertMatch(Iterable<Meal> actual, Iterable<Meal> expected) {
         assertThat(actual).usingElementComparatorIgnoringFields("user").isEqualTo(expected);
+    }
+
+    public static ResultMatcher contentJson(Collection<MealTo> expected) {
+        return result -> assertThat(readListFromJsonMvcResult(result, MealTo.class))
+                .usingFieldByFieldElementComparator().isEqualTo(expected);
     }
 }
