@@ -85,7 +85,14 @@ public class MealRestControllerTest extends AbstractControllerTest {
                 .param("endDate", END_DATE.toString())
                 .param("startTime", START_TIME.toString())
                 .param("endTime", END_TIME.toString()))
-                .andDo(print())
+                .andExpect(contentJson(expected));
+    }
+
+    @Test
+    void testGetBetweenWithoutParams() throws Exception {
+        List<MealTo> expected = MealsUtil.getWithExcess(List.of(MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1),
+                MealsUtil.DEFAULT_CALORIES_PER_DAY);
+        mockMvc.perform(post(REST_URL + "filter"))
                 .andExpect(contentJson(expected));
     }
 }

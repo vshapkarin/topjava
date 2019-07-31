@@ -51,10 +51,10 @@ public class MealRestController extends AbstractMealController {
 
     @PostMapping("/filter")
     public List<MealTo> getBetween(
-            @RequestParam("startDate") LocalDate startDate,
-            @RequestParam("endDate") LocalDate endDate,
-            @RequestParam("startTime") LocalTime startTime,
-            @RequestParam("endTime") LocalTime endTime
+            @RequestParam(defaultValue = "") LocalDate startDate,
+            @RequestParam(defaultValue = "") LocalDate endDate,
+            @RequestParam(defaultValue = "") LocalTime startTime,
+            @RequestParam(defaultValue = "") LocalTime endTime
     ) {
         return super.getBetween(startDate, startTime, endDate, endTime);
     }
