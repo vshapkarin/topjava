@@ -1,25 +1,19 @@
 // $(document).ready(function () {
 $(function () {
     makeEditable({
-            ajaxUrl: "ajax/admin/users/",
+            ajaxUrl: "ajax/meals/",
             datatableApi: $("#datatable").DataTable({
                 "paging": false,
                 "info": true,
                 "columns": [
                     {
-                        "data": "name"
+                        "data": "dateTime"
                     },
                     {
-                        "data": "email"
+                        "data": "description"
                     },
                     {
-                        "data": "roles"
-                    },
-                    {
-                        "data": "enabled"
-                    },
-                    {
-                        "data": "registered"
+                        "data": "calories"
                     },
                     {
                         "defaultContent": "Edit",
@@ -33,18 +27,30 @@ $(function () {
                 "order": [
                     [
                         0,
-                        "asc"
+                        "desc"
                     ]
                 ]
             })
         }
     );
-    $(".enabled").change(function () {
-        $.get(context.ajaxUrl + "enable?" + "id=" + $(this).parents("tr").attr("id") + "&enabled=" + this.checked, updateTable());
-    });
 });
 
 function updateTable() {
+    $.get($("#startDate").val() == ""
+    && $("#endDate").val() == ""
+    && $("#startTime").val() == ""
+    && $("#endTime").val() == ""
+        ? context.ajaxUrl
+        : context.ajaxUrl + 'filter?' + $("#filter").serialize(), function (data) {
+        context.datatableApi.clear().rows.add(data).draw();
+    });
+}
+
+function clearFilter() {
+    $("#startDate").val("");
+    $("#endDate").val("");
+    $("#startTime").val("");
+    $("#endTime").val("");
     $.get(context.ajaxUrl, function (data) {
         context.datatableApi.clear().rows.add(data).draw();
     });

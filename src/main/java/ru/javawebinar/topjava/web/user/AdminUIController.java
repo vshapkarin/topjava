@@ -9,8 +9,10 @@ import ru.javawebinar.topjava.model.User;
 import java.util.List;
 
 @RestController
-@RequestMapping("/ajax/admin/users")
+@RequestMapping(AdminUIController.AJAX_URL)
 public class AdminUIController extends AbstractUserController {
+
+    public static final String AJAX_URL = "/ajax/admin/users";
 
     @Override
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -36,5 +38,12 @@ public class AdminUIController extends AbstractUserController {
         if (user.isNew()) {
             super.create(user);
         }
+    }
+
+    @GetMapping("/enable")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void setEnabled(@RequestParam("id") int id,
+                           @RequestParam("enabled") boolean enabled) {
+        super.setEnabled(id, enabled);
     }
 }
