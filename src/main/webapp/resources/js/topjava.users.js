@@ -1,3 +1,4 @@
+let tr, enabled, checkbox;
 // $(document).ready(function () {
 $(function () {
     makeEditable({
@@ -40,12 +41,24 @@ $(function () {
         }
     );
     $(".enabled").change(function () {
-        $.get(context.ajaxUrl + "enable?" + "id=" + $(this).parents("tr").attr("id") + "&enabled=" + this.checked, updateTable());
+        tr = $(this).parents("tr");
+        checkbox = $(this);
+        enabled = this.checked;
+        $.ajax({
+            type: "POST",
+            url: context.ajaxUrl + "enable",
+            data: "id=" + tr.attr("id") + "&enabled=" + enabled
+        }).done(function() {
+            enabled ? tr.css("color", "black") : tr.css("color", "#aeaeae");
+            successNoty("Changed");
+        }).fail(function() {
+            enabled ? checkbox.prop("checked", false) : checkbox.prop("checked", true);
+        });
     });
 });
 
 function updateTable() {
-    $.get(context.ajaxUrl, function (data) {
-        context.datatableApi.clear().rows.add(data).draw();
+    $.get(context.ajaxUrl, function(data) {
+        drawTable(data)
     });
 }

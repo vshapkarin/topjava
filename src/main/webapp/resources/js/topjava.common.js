@@ -45,6 +45,10 @@ function save() {
     });
 }
 
+function drawTable(data) {
+    context.datatableApi.clear().rows.add(data).draw();
+}
+
 let failedNote;
 
 function closeNoty() {

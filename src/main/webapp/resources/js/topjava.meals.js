@@ -36,22 +36,12 @@ $(function () {
 });
 
 function updateTable() {
-    $.get($("#startDate").val() == ""
-    && $("#endDate").val() == ""
-    && $("#startTime").val() == ""
-    && $("#endTime").val() == ""
-        ? context.ajaxUrl
-        : context.ajaxUrl + 'filter?' + $("#filter").serialize(), function (data) {
-        context.datatableApi.clear().rows.add(data).draw();
+    $.get(context.ajaxUrl + 'filter?' + $("#filter").serialize(), function(data) {
+        drawTable(data)
     });
 }
 
 function clearFilter() {
-    $("#startDate").val("");
-    $("#endDate").val("");
-    $("#startTime").val("");
-    $("#endTime").val("");
-    $.get(context.ajaxUrl, function (data) {
-        context.datatableApi.clear().rows.add(data).draw();
-    });
+    $("#filter").reset();
+    updateTable();
 }

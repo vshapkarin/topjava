@@ -40,7 +40,7 @@ public class AdminUIController extends AbstractUserController {
         }
     }
 
-    @GetMapping("/enable")
+    @PostMapping("/enable")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void setEnabled(@RequestParam("id") int id,
                            @RequestParam("enabled") boolean enabled) {
