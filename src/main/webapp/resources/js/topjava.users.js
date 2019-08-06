@@ -50,9 +50,9 @@ $(function () {
             data: "id=" + tr.attr("id") + "&enabled=" + enabled
         }).done(function() {
             enabled ? tr.css("color", "black") : tr.css("color", "#aeaeae");
-            successNoty("Changed");
+            successNoty(enabled ? "Enabled" : "Disabled");
         }).fail(function() {
-            enabled ? checkbox.prop("checked", false) : checkbox.prop("checked", true);
+            checkbox.prop("checked", !enabled);
         });
     });
 });

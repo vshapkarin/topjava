@@ -42,6 +42,6 @@ function updateTable() {
 }
 
 function clearFilter() {
-    $("#filter").reset();
+    $("#filter")[0].reset();
     updateTable();
 }
