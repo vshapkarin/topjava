@@ -4,14 +4,50 @@ $("#dateTime").datetimepicker({
     format: "Y-m-d H:i"
 });
 
-$("#startDate, #endDate").datetimepicker({
-   timepicker:false,
-    format: "Y-m-d"
+$(function(){
+    $("#startDate").datetimepicker({
+        format:"Y-m-d",
+        onShow:function(ct){
+            let endDate = $("#endDate").val();
+            this.setOptions({
+                maxDate: endDate ? endDate : false
+            })
+        },
+        timepicker:false
+    });
+    $("#endDate").datetimepicker({
+        format:"Y-m-d",
+        onShow:function(ct){
+            let startDate = $("#startDate").val();
+            this.setOptions({
+                minDate: startDate ? startDate : false
+            })
+        },
+        timepicker:false
+    });
 });
 
-$("#startTime, #endTime").datetimepicker({
-   datepicker:false,
-    format: "H:i"
+$(function(){
+    $("#startTime").datetimepicker({
+        format:"H:i",
+        onShow:function(ct){
+            let endTime = $("#endTime").val();
+            this.setOptions({
+                maxTime: ($("#startDate").val() === $("#endDate").val()) && endTime ? endTime : false
+            })
+        },
+        datepicker:false
+    });
+    $("#endTime").datetimepicker({
+        format:"H:i",
+        onShow:function(ct){
+            let startTime = $("#startTime").val();
+            this.setOptions({
+                minTime: ($("#startDate").val() === $("#endDate").val()) && startTime ? startTime : false
+            })
+        },
+        datepicker:false
+    });
 });
 
 $.ajaxSetup({
@@ -77,11 +113,7 @@ $(function () {
                 ]
             ],
             "createdRow": function (row, data, dataIndex) {
-                if (data.excess) {
-                    $(row).css("color", "blue");
-                } else {
-                    $(row).css("color", "green");
-                }
+                $(row).css("color", data.excess ? "blue" : "green");
             }
         }),
         updateTable: updateFilteredTable
