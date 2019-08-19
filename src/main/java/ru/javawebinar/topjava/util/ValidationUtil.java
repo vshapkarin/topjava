@@ -1,8 +1,9 @@
 package ru.javawebinar.topjava.util;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import ru.javawebinar.topjava.HasId;
+import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.util.exception.IllegalRequestDataException;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
@@ -60,7 +61,7 @@ public class ValidationUtil {
         return result;
     }
 
-    public static ResponseEntity<String> getErrorResponse(BindingResult result) {
+    public static String getErrorMessage(BindingResult result) {
         StringJoiner joiner = new StringJoiner("<br>");
         result.getFieldErrors().forEach(
                 fe -> {
@@ -72,7 +73,16 @@ public class ValidationUtil {
                         joiner.add(msg);
                     }
                 });
-        return ResponseEntity.unprocessableEntity().body(joiner.toString());
+        return joiner.toString();
+    }
+
+    public static String getDbErrorMessage(String message) {
+        if (message.contains(User.EMAIL_INDEX)) {
+            return "User with this email already exists";
+        } else if (message.contains(Meal.MEAL_DATETIME_INDEX)) {
+            return "Meal with this date/time already exists";
+        }
+        return message;
     }
 
     private static final Validator validator;

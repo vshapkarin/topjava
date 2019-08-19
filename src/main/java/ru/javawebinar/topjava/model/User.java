@@ -23,8 +23,10 @@ import static ru.javawebinar.topjava.util.UserUtil.DEFAULT_CALORIES_PER_DAY;
         @NamedQuery(name = User.ALL_SORTED, query = "SELECT u FROM User u ORDER BY u.name, u.email"),
 })
 @Entity
-@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email", name = "users_unique_email_idx")})
+@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email", name = User.EMAIL_INDEX)})
 public class User extends AbstractNamedEntity {
+
+    public static final String EMAIL_INDEX = "users_unique_email_idx";
 
     public static final String DELETE = "User.delete";
     public static final String BY_EMAIL = "User.getByEmail";
