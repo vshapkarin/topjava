@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
+import ru.javawebinar.topjava.util.exception.ErrorType;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
@@ -96,6 +97,7 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated))
                 .with(userHttpBasic(USER)))
+                .andExpect(content().string(containsString(ErrorType.VALIDATION_ERROR.toString())))
                 .andExpect(status().isUnprocessableEntity());
     }
 
@@ -123,7 +125,8 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(created))
                 .with(userHttpBasic(USER)))
-                .andExpect(content().string(containsString("Meal with this date/time already exists")))
+                .andExpect(content().string(containsString(Meal.MEAL_DATETIME_INDEX)))
+                .andExpect(content().string(containsString(ErrorType.DATA_ERROR.toString())))
                 .andExpect(status().isConflict());
     }
 

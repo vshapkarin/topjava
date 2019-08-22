@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.to.UserTo;
 import ru.javawebinar.topjava.util.UserUtil;
+import ru.javawebinar.topjava.util.exception.ErrorType;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
@@ -72,7 +73,8 @@ class ProfileRestControllerTest extends AbstractControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(createdTo)))
-                .andExpect(content().string(containsString("User with this email already exists")))
+                .andExpect(content().string(containsString(User.EMAIL_INDEX)))
+                .andExpect(content().string(containsString(ErrorType.DATA_ERROR.toString())))
                 .andExpect(status().isConflict());
     }
 
@@ -95,6 +97,7 @@ class ProfileRestControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(USER))
                 .content(JsonUtil.writeValue(updatedTo)))
                 .andDo(print())
+                .andExpect(content().string(containsString(ErrorType.VALIDATION_ERROR.toString())))
                 .andExpect(status().isUnprocessableEntity());
     }
 }

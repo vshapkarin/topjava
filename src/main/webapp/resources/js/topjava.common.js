@@ -96,8 +96,12 @@ function successNoty(key) {
 function failNoty(jqXHR) {
     closeNoty();
     const errorInfo = JSON.parse(jqXHR.responseText);
+    let details = errorInfo.details.join("<br>");
+    if (jqXHR.status === 409) {
+        details = details.includes("users_unique_email_idx") ? i18n["common.duplicateEmail"] : i18n["common.duplicateMeal"];
+    }
     failedNote = new Noty({
-        text: "<span class='fa fa-lg fa-exclamation-circle'></span> &nbsp;" + i18n["common.errorStatus"] + ": " + jqXHR.status + "<br>" + errorInfo.type + "<br>" + errorInfo.detail,
+        text: "<span class='fa fa-lg fa-exclamation-circle'></span> &nbsp;" + i18n["common.errorStatus"] + ": " + jqXHR.status + "<br>" + errorInfo.type + "<br>" +  details,
         type: "error",
         layout: "bottomRight"
     }).show();

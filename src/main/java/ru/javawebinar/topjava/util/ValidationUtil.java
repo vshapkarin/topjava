@@ -8,8 +8,9 @@ import ru.javawebinar.topjava.util.exception.IllegalRequestDataException;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import javax.validation.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
-import java.util.StringJoiner;
 
 public class ValidationUtil {
 
@@ -61,8 +62,8 @@ public class ValidationUtil {
         return result;
     }
 
-    public static String getErrorMessage(BindingResult result) {
-        StringJoiner joiner = new StringJoiner("<br>");
+    public static String[] getErrorMessage(BindingResult result) {
+        List<String> errorMessages = new ArrayList<>();
         result.getFieldErrors().forEach(
                 fe -> {
                     String msg = fe.getDefaultMessage();
@@ -70,10 +71,10 @@ public class ValidationUtil {
                         if (!msg.startsWith(fe.getField())) {
                             msg = fe.getField() + ' ' + msg;
                         }
-                        joiner.add(msg);
+                        errorMessages.add(msg);
                     }
                 });
-        return joiner.toString();
+        return errorMessages.toArray(new String[0]);
     }
 
     public static String getDbErrorMessage(String message) {

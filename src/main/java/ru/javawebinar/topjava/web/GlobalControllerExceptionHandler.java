@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.web;
 
-import org.postgresql.util.PSQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -21,9 +20,7 @@ public class GlobalControllerExceptionHandler {
         Throwable rootCause = ValidationUtil.getRootCause(e);
         ModelAndView mav = new ModelAndView("exception/exception");
         mav.addObject("exception", rootCause);
-        mav.addObject("message", rootCause.getClass().equals(PSQLException.class)
-                ? ValidationUtil.getDbErrorMessage(rootCause.toString())
-                : rootCause.toString());
+        mav.addObject("message", rootCause.toString());
 
         // Interceptor is not invoked, put userTo
         AuthorizedUser authorizedUser = SecurityUtil.safeGet();
