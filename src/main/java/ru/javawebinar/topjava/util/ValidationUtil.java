@@ -2,8 +2,6 @@ package ru.javawebinar.topjava.util;
 
 import org.springframework.validation.BindingResult;
 import ru.javawebinar.topjava.HasId;
-import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.util.exception.IllegalRequestDataException;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
@@ -75,15 +73,6 @@ public class ValidationUtil {
                     }
                 });
         return errorMessages.toArray(new String[0]);
-    }
-
-    public static String getDbErrorMessage(String message) {
-        if (message.contains(User.EMAIL_INDEX)) {
-            return "User with this email already exists";
-        } else if (message.contains(Meal.MEAL_DATETIME_INDEX)) {
-            return "Meal with this date/time already exists";
-        }
-        return message;
     }
 
     private static final Validator validator;

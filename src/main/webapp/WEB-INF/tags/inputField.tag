@@ -14,7 +14,6 @@
             <c:when test="${inputType == 'number'}"><form:input path="${name}" type="number" class="form-control is-invalid"/></c:when>
             <c:otherwise><form:input path="${name}" class="form-control is-invalid"/></c:otherwise>
         </c:choose>
-        <spring:message code="common.duplicateEmail" var="duplicateEmail"/>
-        <div class="invalid-feedback">${status.errorMessage.contains("DataIntegrityViolationException") ? duplicateEmail : status.errorMessage}</div>
+        <div class="invalid-feedback">${status.errorMessage}</div>
     </div>
 </spring:bind>

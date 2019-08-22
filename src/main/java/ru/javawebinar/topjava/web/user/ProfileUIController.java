@@ -11,8 +11,6 @@ import org.springframework.web.bind.support.SessionStatus;
 import ru.javawebinar.topjava.to.UserTo;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @Controller
@@ -32,7 +30,7 @@ public class ProfileUIController extends AbstractUserController {
             try {
                 super.update(userTo, SecurityUtil.authUserId());
             } catch (DataIntegrityViolationException e) {
-                result.rejectValue("email", "409", e.toString());
+                result.rejectValue("email", "user.duplicateEmail");
                 return "profile";
             }
             SecurityUtil.get().update(userTo);
@@ -49,8 +47,7 @@ public class ProfileUIController extends AbstractUserController {
     }
 
     @PostMapping("/register")
-    public String saveRegister(@Valid UserTo userTo, BindingResult result, SessionStatus status,
-                               ModelMap model, HttpServletRequest req, HttpServletResponse resp) {
+    public String saveRegister(@Valid UserTo userTo, BindingResult result, SessionStatus status, ModelMap model) {
         if (result.hasErrors()) {
             model.addAttribute("register", true);
             return "profile";
@@ -58,7 +55,7 @@ public class ProfileUIController extends AbstractUserController {
             try {
                 super.create(userTo);
             } catch(DataIntegrityViolationException e) {
-                result.rejectValue("email", "409", e.toString());
+                result.rejectValue("email", "user.duplicateEmail");
                 model.addAttribute("register", true);
                 return "profile";
             }

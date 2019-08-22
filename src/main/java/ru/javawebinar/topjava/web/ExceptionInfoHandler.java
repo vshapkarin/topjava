@@ -51,7 +51,11 @@ public class ExceptionInfoHandler {
     @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)  // 422
     @ExceptionHandler({MethodArgumentNotValidException.class, BindException.class})
     public ErrorInfo validationUIError(HttpServletRequest req, Exception e) {
-        return logAndGetErrorInfo(req, e, VALIDATION_ERROR);
+        String[] errorMessages = ValidationUtil.getErrorMessage(
+                e.getClass().equals(BindException.class)
+                        ? ((BindException) e).getBindingResult()
+                        : ((MethodArgumentNotValidException) e).getBindingResult());
+        return logAndGetErrorInfo(req, e, VALIDATION_ERROR, errorMessages);
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -71,11 +75,7 @@ public class ExceptionInfoHandler {
         return new ErrorInfo(req.getRequestURL(), errorType, rootCause.toString());
     }
 
-    private static ErrorInfo logAndGetErrorInfo(HttpServletRequest req, Exception e, ErrorType errorType) {
-        String[] errorMessages = ValidationUtil.getErrorMessage(
-                e.getClass().equals(BindException.class)
-                ? ((BindException) e).getBindingResult()
-                : ((MethodArgumentNotValidException) e).getBindingResult());
+    private static ErrorInfo logAndGetErrorInfo(HttpServletRequest req, Exception e, ErrorType errorType, String[] errorMessages) {
         log.warn("{} at request  {}: {}", errorType, req.getRequestURL(), errorMessages);
         return new ErrorInfo(req.getRequestURL(), errorType, errorMessages);
     }
